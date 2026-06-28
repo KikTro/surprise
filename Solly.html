@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For my Shirsa ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .section {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Section 1: Opening */
+        #s1 {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            pointer-events: none;
+            background-color: #000000;
+        }
+
+        .scroll-text {
+            font-size: 2.8rem;
+            color: #FF8FA3;
+            animation: pulse 2s infinite ease-in-out;
+            letter-spacing: 2px;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+        }
+
+        /* Section 2: Infinite Heart Bloom */
+        #s2 {
+            height: 1000vh;
+            z-index: 1;
+        }
+
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scrub-heart {
+            position: absolute;
+            width: 80px;
+            height: 75px;
+            top: 50%;
+            left: 50%;
+            margin-left: -40px;
+            margin-top: -37.5px;
+            transform: scale(0);
+            will-change: transform, opacity;
+        }
+
+        .parallax-particle {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.6;
+            z-index: 2;
+            will-change: transform;
+        }
+
+        /* Section 3: Mini Love Game */
+        #s3 {
+            height: 100vh;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .game-info {
+            text-align: center;
+            z-index: 20;
+            padding: 0 20px;
+        }
+
+        .game-title {
+            font-size: 3rem;
+            color: #FF4D6D;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            text-shadow: 0 0 15px rgba(255, 77, 109, 0.5);
+        }
+
+        .game-subtitle {
+            font-size: 1.3rem;
+            color: #FF8FA3;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #FF0000, #4A001F);
+            border: none;
+            padding: 16px 50px;
+            border-radius: 40px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(74, 0, 31, 0.7);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .start-btn:active {
+            transform: scale(0.92);
+            box-shadow: 0 5px 15px rgba(74, 0, 31, 0.7);
+        }
+
+        .game-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 40px;
+            left: 30px;
+            right: 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #FF8FA3;
+            z-index: 20;
+        }
+
+        .emoji-target {
+            position: absolute;
+            font-size: 50px;
+            pointer-events: auto;
+            cursor: pointer;
+            user-select: none;
+            transform: translate(-50%, -50%) scale(0);
+            animation: targetPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.6));
+        }
+
+        @keyframes targetPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+
+            20% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+
+            35% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            80% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .burst-particle {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: burstAnim 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes burstAnim {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .game-over {
+            text-align: center;
+            z-index: 20;
+            padding: 40px 30px;
+            animation: fadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .game-over h2 {
+            margin: 0 0 10px 0;
+            color: #FF8FA3;
+            font-weight: 300;
+        }
+
+        .game-over h1 {
+            margin: 0 0 20px 0;
+            font-size: 2.8rem;
+            color: #FF0000;
+        }
+
+        .game-over p {
+            color: #ffb3c1;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        /* Section 4: Kiss Debt */
+        #s4 {
+            height: 100vh;
+            background-color: #020001;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .kiss-card {
+            padding: 60px 40px;
+            text-align: center;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1.2s ease;
+        }
+
+        .kiss-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .kiss-number {
+            font-size: 8rem;
+            font-weight: 700;
+            color: #FF0000;
+            margin-bottom: 20px;
+            line-height: 1;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            will-change: transform;
+        }
+
+        .kiss-text {
+            font-size: 1.8rem;
+            color: #ffe6ea;
+            font-weight: 300;
+        }
+
+        .kiss-text span {
+            font-weight: 600;
+            color: #FF8FA3;
+        }
+
+        /* Section 5: Final Letter */
+        #s5 {
+            min-height: 150vh;
+            background: linear-gradient(to bottom, #020001, #000000);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 25px;
+            z-index: 10;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-container {
+            max-width: 550px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .typewriter-text {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            line-height: 1.6;
+            color: #fff0f2;
+            text-align: center;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: clamp(1.2rem, 5vw, 1.8rem);
+            background-color: #FF8FA3;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+            margin-left: 6px;
+            border-radius: 2px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .footer-text {
+            margin-top: 60px;
+            text-align: center;
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+            color: #FF8FA3;
+            opacity: 0;
+            transition: opacity 3s ease;
+            font-weight: 300;
+        }
+
+        .final-heart {
+            font-size: 4rem;
+            color: #4A001F;
+            margin-top: 30px;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+            will-change: transform;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.15);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+        }
+
+        .falling-particle {
+            position: absolute;
+            top: -50px;
+            color: #FF8FA3;
+            pointer-events: none;
+            animation: fall linear forwards;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.7;
+            }
+
+            80% {
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translateY(160vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Section 1 -->
+    <div id="s1" class="section">
+        <div class="scroll-text">Scroll Down ❤️</div>
+    </div>
+
+    <!-- Section 2 -->
+    <div id="s2" class="section">
+        <div class="sticky-container">
+            <div id="heart-container" style="position:absolute; width:100%; height:100%; z-index:1;"></div>
+            <div id="particles-container"
+                style="position:absolute; width:100%; height:100%; z-index:2; overflow:hidden;"></div>
+        </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div id="s3" class="section">
+        <div class="game-info">
+            <div class="game-title">Catch all the love before it disappears! 💋❤️</div>
+            <div class="game-subtitle">You only have 10 seconds.</div>
+            <button class="start-btn" id="start-btn">Start</button>
+        </div>
+        <div class="game-area" id="game-area"></div>
+        <div class="game-ui" id="game-ui" style="display: none;">
+            <div id="score-counter">0</div>
+            <div id="time-counter">10s</div>
+        </div>
+        <div class="game-over" id="game-over" style="display: none;">
+            <h2>Time's Up!</h2>
+            <h1 id="final-score-text">You caught 0 loves ❤️</h1>
+            <p>Scroll down to continue...</p>
+        </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div id="s4" class="section">
+        <div class="kiss-card">
+            <div class="kiss-number" id="kiss-number">0</div>
+            <div class="kiss-text">You have to give me <span id="kiss-number-inline">0</span> kisses 💋</div>
+        </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div id="s5" class="section">
+        <div class="letter-container">
+            <div class="typewriter-text" id="typewriter-text"></div>
+            <div class="footer-text">
+                Made with love by urs forever ❤️<br>
+                <div class="final-heart">❤️</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Section 2: Heart Bloom Initialization ---
+        const heartColors = ['#4A001F', '#FF0000', '#FF4D6D', '#FF8FA3', '#FF4D6D', '#FF0000'];
+        const numHearts = 35; // Number of hearts for a long sequence
+        const heartContainer = document.getElementById('heart-container');
+
+        for (let i = 0; i < numHearts; i++) {
+            const h = document.createElement('div');
+            h.className = 'scrub-heart';
+
+            // Last heart is pure black to transition into the next section
+            let color = (i === numHearts - 1) ? '#000000' : heartColors[i % heartColors.length];
+            h.style.color = color;
+
+            h.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 32 29.6"><path fill="currentColor" d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>`;
+            heartContainer.appendChild(h);
+        }
+
+        // Parallax Particles Initialization
+        const particleContainer = document.getElementById('particles-container');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'parallax-particle';
+            p.innerText = ['❤️', '✨', '💖'][Math.floor(Math.random() * 3)];
+            p.style.left = (Math.random() * 100) + 'vw';
+            p.style.top = (Math.random() * 100) + 'vh';
+            const depth = 0.5 + Math.random() * 2;
+            p.setAttribute('data-depth', depth);
+            p.style.fontSize = (10 + Math.random() * 15) + 'px';
+            particleContainer.appendChild(p);
+        }
+
+        // --- Scroll Setup, Fade Out, and Heart Scrubbing ---
+        const s1 = document.getElementById('s1');
+        const s2 = document.getElementById('s2');
+        const hearts = document.querySelectorAll('.scrub-heart');
+        const particles = document.querySelectorAll('.parallax-particle');
+
+        let ticking = false;
+
+        function updateScrollEffects() {
+            const scrollY = window.scrollY;
+
+            // Fade out Section 1
+            let opacity = 1 - (scrollY / 250);
+            s1.style.opacity = Math.max(0, opacity);
+            if (scrollY > 300) {
+                s1.style.pointerEvents = 'none';
+            } else {
+                s1.style.pointerEvents = 'auto';
+            }
+
+            // Scrub Hearts
+            const totalScroll = s2.offsetHeight - window.innerHeight;
+            let progress = scrollY / totalScroll;
+            if (progress < 0) progress = 0;
+
+            hearts.forEach((h, i) => {
+                const startP = i * 0.022; // 35 hearts * 0.022 = 0.77 max start progress
+                if (progress < startP) {
+                    h.style.transform = `scale(0)`;
+                    h.style.opacity = 0;
+                } else {
+                    const localP = progress - startP;
+                    let scale = localP * 450; // Reaches scale ~100 nicely before progress 1
+                    h.style.transform = `translate3d(0, 0, 0) scale(${scale})`;
+                    h.style.opacity = 1;
+                }
+            });
+
+            // Parallax Particles
+            particles.forEach(p => {
+                const depth = parseFloat(p.getAttribute('data-depth'));
+                let y = - (scrollY * depth) % (window.innerHeight + 100);
+                p.style.transform = `translate3d(0, ${y}px, 0)`;
+            });
+
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(updateScrollEffects);
+                ticking = true;
+            }
+        });
+
+        // Initial call
+        updateScrollEffects();
+
+        // --- Section 3: Mini Love Game ---
+        let gameScore = 0;
+        let gameTimer = 10;
+        let gameInterval;
+        let spawnInterval;
+        window.globalScore = 0;
+
+        const startBtn = document.getElementById('start-btn');
+        const gameUi = document.getElementById('game-ui');
+        const gameArea = document.getElementById('game-area');
+        const gameOver = document.getElementById('game-over');
+        const scoreCounter = document.getElementById('score-counter');
+        const timeCounter = document.getElementById('time-counter');
+        const finalScoreText = document.getElementById('final-score-text');
+
+        startBtn.addEventListener('click', () => {
+            document.querySelector('.game-info').style.display = 'none';
+            gameUi.style.display = 'flex';
+            gameScore = 0;
+            gameTimer = 10;
+            scoreCounter.innerText = gameScore;
+            timeCounter.innerText = gameTimer + 's';
+
+            gameInterval = setInterval(() => {
+                gameTimer--;
+                timeCounter.innerText = gameTimer + 's';
+                if (gameTimer <= 0) endGame();
+            }, 1000);
+
+            spawnInterval = setInterval(spawnEmoji, 350);
+        });
+
+        function spawnEmoji() {
+            const emojis = ['❤️', '💋', '❤️', '💕', '💋'];
+            const el = document.createElement('div');
+            el.className = 'emoji-target';
+            el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+            const x = 15 + Math.random() * 70;
+            const y = 15 + Math.random() * 70;
+            el.style.left = x + '%';
+            el.style.top = y + '%';
+
+            const handleTap = (e) => {
+                e.preventDefault();
+                if (!el.parentElement) return;
+
+                if (navigator.vibrate) {
+                    try { navigator.vibrate(40); } catch (err) { }
+                }
+
+                gameScore++;
+                scoreCounter.innerText = gameScore;
+                window.globalScore = gameScore;
+
+                let clientX, clientY;
+                if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+                createBurst(clientX, clientY);
+                el.remove();
+            };
+
+            el.addEventListener('touchstart', handleTap, { passive: false });
+            el.addEventListener('mousedown', handleTap);
+
+            gameArea.appendChild(el);
+
+            setTimeout(() => {
+                if (el.parentElement) el.remove();
+            }, 800);
+        }
+
+        function createBurst(x, y) {
+            for (let i = 0; i < 7; i++) {
+                const p = document.createElement('div');
+                p.innerText = ['❤️', '💋', '✨'][Math.floor(Math.random() * 3)];
+                p.className = 'burst-particle';
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+                p.style.setProperty('--dx', ((Math.random() - 0.5) * 160) + 'px');
+                p.style.setProperty('--dy', ((Math.random() - 0.5) * 160) + 'px');
+                document.body.appendChild(p);
+                setTimeout(() => { if (p.parentElement) p.remove(); }, 600);
+            }
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+            gameArea.innerHTML = '';
+            gameUi.style.display = 'none';
+            gameOver.style.display = 'block';
+            finalScoreText.innerText = `You caught ${gameScore} loves ❤️`;
+
+            document.getElementById('s4').style.display = 'flex';
+            document.getElementById('s5').style.display = 'flex';
+        }
+
+        // --- Section 4: Kiss Debt Animation ---
+        function animateKissDebt() {
+            const target = window.globalScore || 0;
+            const card = document.querySelector('.kiss-card');
+            card.classList.add('visible');
+
+            const numEl = document.getElementById('kiss-number');
+            const numInline = document.getElementById('kiss-number-inline');
+
+            if (target === 0) {
+                numEl.innerText = 0;
+                numInline.innerText = 0;
+                return;
+            }
+
+            let current = 0;
+            const duration = 1800; // ms
+            const intervalTime = 30;
+            const increment = target / (duration / intervalTime);
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                    numEl.style.transform = 'scale(1.25)';
+                    setTimeout(() => numEl.style.transform = 'scale(1)', 300);
+                }
+                const val = Math.round(current);
+                numEl.innerText = val;
+                numInline.innerText = val;
+            }, intervalTime);
+        }
+
+        // --- Section 5: Typewriter Letter ---
+        function typeLetter() {
+            const text = "To my dearest Shirsa,\n\nEvery scroll brought u through little pieces of my heart.\nEvery heart, every kiss, every tiny animation was made for you.\n\nNo mattr how many hearts appeared,\ntheres still one more inside me waiting to bloom whenever I see you smile.\n\nFor my Shirsa ❤️";
+            const container = document.getElementById('typewriter-text');
+            let i = 0;
+
+            container.innerHTML = '<span class="cursor"></span>';
+            const cursor = container.querySelector('.cursor');
+
+            function type() {
+                if (i < text.length) {
+                    const char = text.charAt(i);
+                    const span = document.createElement('span');
+                    if (char === '\n') {
+                        span.innerHTML = '<br>';
+                    } else {
+                        span.innerText = char;
+                    }
+                    container.insertBefore(span, cursor);
+                    i++;
+                    setTimeout(type, 35 + Math.random() * 40); // Natural random typing speed
+                } else {
+                    setTimeout(() => {
+                        document.querySelector('.footer-text').style.opacity = 1;
+                    }, 1200);
+                }
+            }
+            setTimeout(type, 1000); // Initial delay
+        }
+
+        function startFallingParticles() {
+            const container = document.getElementById('s5');
+            setInterval(() => {
+                const p = document.createElement('div');
+                p.className = 'falling-particle';
+                p.innerText = ['❤️', '💕', '💗'][Math.floor(Math.random() * 3)];
+                p.style.left = (Math.random() * 95) + 'vw';
+                const duration = 6 + Math.random() * 5;
+                p.style.animationDuration = duration + 's';
+                p.style.fontSize = (8 + Math.random() * 14) + 'px';
+                container.appendChild(p);
+                setTimeout(() => { if (p.parentElement) p.remove(); }, duration * 1000);
+            }, 600);
+        }
+
+        // --- Intersection Observers ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // Section 4
+                if (entry.target.id === 's4') {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+                        if (!window.kissDebtAnimated) {
+                            animateKissDebt();
+                            window.kissDebtAnimated = true;
+                        }
+                    }
+                }
+                // Section 5
+                if (entry.target.id === 's5') {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
+                        if (!window.letterAnimated) {
+                            typeLetter();
+                            startFallingParticles();
+                            window.letterAnimated = true;
+                        }
+                    }
+                }
+            });
+        }, { threshold: [0, 0.25, 0.4, 0.5, 1.0] });
+
+        observer.observe(document.getElementById('s2'));
+        observer.observe(document.getElementById('s4'));
+        observer.observe(document.getElementById('s5'));
+
+    </script>
+</body>
+
+</html>
