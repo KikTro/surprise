@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>What are the chances?</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Inter', 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            overscroll-behavior: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-y;
+        }
+
+        /* The total scroll height */
+        #scroll-container {
+            height: 35000px;
+        }
+
+        #ui-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .header {
+            position: absolute;
+            top: 6vh;
+            width: 100%;
+            text-align: center;
+            transition: opacity 1.5s ease;
+        }
+
+        .header h1 {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: 300;
+            margin: 0;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+            padding: 0 20px;
+        }
+
+        .header p {
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
+            opacity: 0.5;
+            margin-top: 8px;
+            font-weight: 300;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 6px;
+            height: 14px;
+            background-color: white;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+        }
+
+        .probability {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 200;
+            margin-bottom: 24px;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+            letter-spacing: -1px;
+        }
+
+        .subtext {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: 300;
+            opacity: 0.6;
+            max-width: 80%;
+            line-height: 1.5;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Final reveal specific styles */
+        #final-reveal {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #final-number {
+            font-size: clamp(4rem, 15vw, 8rem);
+            font-weight: 200;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        #final-text {
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-weight: 300;
+            opacity: 0;
+            transition: opacity 2s ease;
+            color: #eeeeee;
+        }
+
+        .heart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            position: absolute;
+            transition: opacity 2s ease;
+        }
+
+        .heart {
+            color: #ff3366;
+            font-size: clamp(3rem, 10vw, 5rem);
+            animation: pulse 2.5s infinite ease-in-out;
+            text-shadow: 0 0 40px rgba(255, 51, 102, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .handwritten {
+            font-family: 'Caveat', cursive, sans-serif;
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+            margin-top: 30px;
+            color: #ffffff;
+            white-space: pre-line;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            transition: opacity 3s ease 1s;
+        }
+
+        .for-shirsa {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            margin-top: 40px;
+            opacity: 0;
+            color: #ffb3c6;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 300;
+            transition: opacity 3s ease 2.5s;
+        }
+
+        .day-tracker {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            margin-top: 20px;
+            opacity: 0;
+            color: #aaaaaa;
+            letter-spacing: 1px;
+            font-weight: 300;
+            transition: opacity 3s ease 3.5s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255, 51, 102, 0.5));
+            }
+
+            50% {
+                transform: scale(1.08);
+                filter: drop-shadow(0 0 40px rgba(255, 51, 102, 0.8));
+            }
+
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255, 51, 102, 0.5));
+            }
+        }
+
+        /* Loading fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Inter:wght@200;300;400&display=swap');
+    </style>
+</head>
+
+<body>
+
+    <div id="scroll-container"></div>
+
+    <div id="canvas-container">
+        <canvas id="bg-canvas"></canvas>
+    </div>
+
+    <div id="ui-layer">
+        <div class="header" id="header">
+            <h1>What are the chances that I would find you?</h1>
+            <p>Calculating<span class="cursor"></span></p>
+        </div>
+
+        <div class="center-content" id="main-content">
+            <div class="probability" id="probability-text">1 in 2</div>
+            <div class="subtext" id="subtext">Like flipping a coin.</div>
+        </div>
+
+        <div id="final-reveal">
+            <div id="final-number">1</div>
+            <div id="final-text">Because there was only ever one you.</div>
+
+            <div class="heart-container" id="heart-container">
+                <div class="heart">❤️</div>
+                <div class="handwritten" id="handwritten-text">Out of infinite possibilities,<br>somehow I met my
+                    favorite person.</div>
+                <div class="for-shirsa" id="for-shirsa">For my Shirsa ❤️</div>
+                <div class="day-tracker" id="day-tracker">Day #2 of making surprise websites untill marriage</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll implementation
+        let currentScroll = 0;
+        let targetScroll = 0;
+        let maxScroll = 0;
+        let progress = 0;
+
+        function updateScrollLimits() {
+            maxScroll = Math.max(1, document.getElementById('scroll-container').scrollHeight - window.innerHeight);
+        }
+        window.addEventListener('resize', updateScrollLimits);
+        updateScrollLimits();
+
+        window.addEventListener('scroll', () => {
+            targetScroll = window.scrollY;
+        }, { passive: true });
+
+        // Canvas setup
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, cx, cy;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            cx = width / 2;
+            cy = height / 2;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // DOM Elements
+        const header = document.getElementById('header');
+        const mainContent = document.getElementById('main-content');
+        const probText = document.getElementById('probability-text');
+        const subtext = document.getElementById('subtext');
+
+        const finalReveal = document.getElementById('final-reveal');
+        const finalNumber = document.getElementById('final-number');
+        const finalText = document.getElementById('final-text');
+        const heartContainer = document.getElementById('heart-container');
+        const handwrittenText = document.getElementById('handwritten-text');
+        const forShirsa = document.getElementById('for-shirsa');
+        const dayTracker = document.getElementById('day-tracker');
+
+        // Number Formatting
+        function formatSuperLarge(power) {
+            if (power < 15) return Math.pow(10, power).toLocaleString();
+            if (power < 1000) return `10^${Math.floor(power)}`;
+            if (power < 1000000) return `10^${Math.floor(power).toLocaleString()}`;
+            return `10^(10^${Math.floor(Math.log10(power))})`;
+        }
+
+        // Section configurations mapping scroll progress to events
+        const sections = [
+            { start: 0.00, end: 0.08, text: "Like flipping a coin." },
+            { start: 0.08, end: 0.16, text: "Like rolling the perfect number." },
+            { start: 0.16, end: 0.30, text: "Finding one among millions." },
+            { start: 0.30, end: 0.45, text: "Suppose every star was another chance." },
+            { start: 0.45, end: 0.60, text: "Still not unlikely enough." },
+            { start: 0.60, end: 0.75, text: "Even infinite universes don't feel like enough chances." },
+            { start: 0.75, end: 0.82, text: "" }, // Freeze
+            { start: 0.82, end: 1.00, text: "" }  // Reveal
+        ];
+
+        let lastText = "";
+
+        // Particle Engines
+        const particles = [];
+        const universes = [];
+
+        // Initialize starfield/dots
+        for (let i = 0; i < 3000; i++) {
+            particles.push({
+                x: (Math.random() - 0.5) * 4000,
+                y: (Math.random() - 0.5) * 4000,
+                z: Math.random() * 4000 + 10,
+                baseSize: Math.random() * 2 + 0.5,
+                hue: Math.random() > 0.8 ? Math.random() * 40 + 200 : 255, // Mostly white, some blue
+                sat: Math.random() > 0.8 ? 80 : 0
+            });
+        }
+
+        // Initialize universes
+        for (let i = 0; i < 500; i++) {
+            universes.push({
+                x: (Math.random() - 0.5) * 8000,
+                y: (Math.random() - 0.5) * 8000,
+                z: Math.random() * 8000 + 100,
+                size: Math.random() * 100 + 30,
+                color: `hsla(${Math.random() * 360}, 60%, 50%, 0.5)`
+            });
+        }
+
+        // Wireframe drawing for coin/dice
+        function drawWireframe(type, rotX, rotY, scale) {
+            ctx.save();
+            ctx.translate(cx, cy - 80);
+            ctx.scale(scale, scale);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 1.5;
+
+            if (type === 'coin') {
+                ctx.beginPath();
+                for (let i = 0; i <= Math.PI * 2.1; i += 0.1) {
+                    let x = Math.cos(i) * 60;
+                    let z = Math.sin(i) * 60;
+
+                    let rx = x * Math.cos(rotY) - z * Math.sin(rotY);
+                    let rz = x * Math.sin(rotY) + z * Math.cos(rotY);
+                    let ry = rx * Math.sin(rotX) + rz * Math.cos(rotX);
+
+                    if (i === 0) ctx.moveTo(rx, ry);
+                    else ctx.lineTo(rx, ry);
+                }
+                ctx.stroke();
+            } else if (type === 'dice') {
+                const size = 40;
+                const v = [
+                    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+                    [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]
+                ];
+                const edges = [
+                    [0, 1], [1, 2], [2, 3], [3, 0],
+                    [4, 5], [5, 6], [6, 7], [7, 4],
+                    [0, 4], [1, 5], [2, 6], [3, 7]
+                ];
+                ctx.beginPath();
+                edges.forEach(e => {
+                    let project = (pt) => {
+                        let x = pt[0] * size, y = pt[1] * size, z = pt[2] * size;
+                        let x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
+                        let z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
+                        let y1 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+                        return { x: x1, y: y1 };
+                    };
+                    let p1 = project(v[e[0]]), p2 = project(v[e[1]]);
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                });
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        let time = 0;
+
+        function updateUI(p) {
+            // Text logic
+            let currentText = "";
+            for (let sec of sections) {
+                if (p >= sec.start && p < sec.end) {
+                    currentText = sec.text;
+                    break;
+                }
+            }
+
+            if (currentText !== lastText) {
+                subtext.style.opacity = 0;
+                setTimeout(() => {
+                    subtext.innerText = currentText;
+                    if (currentText !== "" && p < 0.75) subtext.style.opacity = 1;
+                }, 200);
+                lastText = currentText;
+            }
+
+            // Math/Counter logic
+            if (p < 0.08) {
+                let den = Math.floor(2 + (p / 0.08) * 4);
+                probText.innerText = `1 in ${den}`;
+            } else if (p < 0.16) {
+                let den = Math.floor(6 + ((p - 0.08) / 0.08) * 94);
+                probText.innerText = `1 in ${den}`;
+            } else if (p < 0.30) {
+                let logMin = 2, logMax = 6;
+                let t = (p - 0.16) / 0.14;
+                let val = Math.pow(10, logMin + t * (logMax - logMin));
+                probText.innerText = `1 in ${Math.floor(val).toLocaleString()}`;
+            } else if (p < 0.45) {
+                let logMin = 6, logMax = 15;
+                let t = (p - 0.30) / 0.15;
+                let val = logMin + t * (logMax - logMin);
+                probText.innerText = `1 in ${formatSuperLarge(val)}`;
+            } else if (p < 0.60) {
+                let logMin = 15, logMax = 100;
+                let t = (p - 0.45) / 0.15;
+                let val = logMin + t * (logMax - logMin);
+                probText.innerText = `1 in ${formatSuperLarge(val)}`;
+            } else if (p < 0.75) {
+                let logMin = Math.log10(100), logMax = 12; // up to 10^(10^12)
+                let t = (p - 0.60) / 0.15;
+                let powerOfPower = Math.pow(10, logMin + t * (logMax - logMin));
+                probText.innerText = `1 in 10^(${formatSuperLarge(powerOfPower)})`;
+            }
+
+            // Section 6 & 7 Logic
+            if (p >= 0.75) {
+                mainContent.style.opacity = 0;
+            } else {
+                mainContent.style.opacity = 1;
+            }
+
+            if (p >= 0.80) {
+                header.style.opacity = 0;
+            } else {
+                header.style.opacity = 1;
+            }
+
+            if (p >= 0.82 && p < 0.86) {
+                finalReveal.style.opacity = 1;
+                finalNumber.style.opacity = 1;
+                finalNumber.innerText = "Probability found.";
+                finalNumber.style.fontSize = "clamp(2rem, 6vw, 3rem)";
+                finalNumber.style.textShadow = "0 0 20px rgba(255,255,255,0.5)";
+                finalText.style.opacity = 0;
+                heartContainer.style.opacity = 0;
+            } else if (p >= 0.86 && p < 0.90) {
+                finalReveal.style.opacity = 1;
+                finalNumber.style.opacity = 1;
+                finalNumber.innerText = "1";
+                finalNumber.style.fontSize = "clamp(6rem, 20vw, 12rem)";
+                finalNumber.style.textShadow = "0 0 50px rgba(255,255,255,1)";
+                finalText.style.opacity = 1;
+                heartContainer.style.opacity = 0;
+            } else if (p >= 0.90) {
+                finalReveal.style.opacity = 1;
+                finalNumber.style.opacity = 0;
+                finalText.style.opacity = 0;
+                heartContainer.style.opacity = 1;
+
+                if (p >= 0.94) {
+                    handwrittenText.style.opacity = 1;
+                } else {
+                    handwrittenText.style.opacity = 0;
+                }
+
+                if (p >= 0.97) {
+                    forShirsa.style.opacity = 1;
+                    dayTracker.style.opacity = 1;
+                } else {
+                    forShirsa.style.opacity = 0;
+                    dayTracker.style.opacity = 0;
+                }
+            } else {
+                finalReveal.style.opacity = 0;
+                finalNumber.style.opacity = 0;
+                finalText.style.opacity = 0;
+            }
+        }
+
+        function loop() {
+            // Smooth lerp for scroll
+            currentScroll += (targetScroll - currentScroll) * 0.08;
+            progress = Math.max(0, Math.min(1, currentScroll / maxScroll));
+
+            time += 0.016;
+            ctx.clearRect(0, 0, width, height);
+
+            updateUI(progress);
+
+            // Shape animations
+            if (progress < 0.08) {
+                drawWireframe('coin', time * 2, time * 3, 1 - (progress / 0.08));
+            } else if (progress >= 0.08 && progress < 0.16) {
+                let local = (progress - 0.08) / 0.08;
+                let scale = Math.sin(local * Math.PI);
+                drawWireframe('dice', time * 1.5, time * 2.2, scale);
+            }
+
+            // Particle / Universe simulation
+            if (progress >= 0.16 && progress < 0.75) {
+                let speed = 0;
+                if (progress < 0.30) speed = 5;
+                else if (progress < 0.45) speed = 25;
+                else if (progress < 0.60) speed = 80;
+                else speed = 300;
+
+                let fov = 400;
+
+                // Draw Stars/Galaxies
+                if (progress < 0.65) {
+                    let numParts = progress < 0.30 ? Math.floor(((progress - 0.16) / 0.14) * 3000) : 3000;
+                    ctx.globalCompositeOperation = 'screen';
+
+                    for (let i = 0; i < numParts; i++) {
+                        let p = particles[i];
+                        p.z -= speed;
+                        if (p.z <= 1) p.z = 4000;
+
+                        let scale = fov / p.z;
+                        let x2d = (p.x * scale) + cx;
+                        let y2d = (p.y * scale) + cy;
+
+                        if (x2d > 0 && x2d < width && y2d > 0 && y2d < height) {
+                            ctx.beginPath();
+                            ctx.arc(x2d, y2d, p.baseSize * scale, 0, Math.PI * 2);
+
+                            if (progress > 0.35) {
+                                ctx.fillStyle = `hsla(${p.hue}, ${p.sat}%, 80%, ${Math.min(1, scale)})`;
+                            } else {
+                                ctx.fillStyle = `rgba(255,255,255, ${Math.min(1, scale)})`;
+                            }
+                            ctx.fill();
+                        }
+                    }
+                    ctx.globalCompositeOperation = 'source-over';
+                }
+
+                // Draw Universes
+                if (progress >= 0.45) {
+                    let numUni = progress < 0.60 ? Math.floor(((progress - 0.45) / 0.15) * 500) : 500;
+                    ctx.globalCompositeOperation = 'screen';
+
+                    for (let i = 0; i < numUni; i++) {
+                        let u = universes[i];
+                        u.z -= speed * 0.8;
+                        if (u.z <= 1) u.z = 8000;
+
+                        let scale = fov / u.z;
+                        let x2d = (u.x * scale) + cx;
+                        let y2d = (u.y * scale) + cy;
+
+                        if (x2d > 0 && x2d < width && y2d > 0 && y2d < height) {
+                            ctx.globalAlpha = Math.min(0.6, scale);
+                            let grad = ctx.createRadialGradient(x2d, y2d, 0, x2d, y2d, u.size * scale);
+                            grad.addColorStop(0, u.color);
+                            grad.addColorStop(1, 'transparent');
+                            ctx.fillStyle = grad;
+
+                            ctx.beginPath();
+                            ctx.arc(x2d, y2d, u.size * scale, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                    ctx.globalAlpha = 1;
+                    ctx.globalCompositeOperation = 'source-over';
+                }
+            }
+
+            // Final drifting stars background
+            if (progress >= 0.86) {
+                ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                for (let i = 0; i < 150; i++) {
+                    let p = particles[i];
+                    p.y -= 0.3; // drift up
+                    p.x += Math.sin(time * 0.5 + i) * 0.2;
+                    if (p.y < -2000) p.y = 2000;
+
+                    let scale = 400 / p.z;
+                    let x2d = (p.x * scale) + cx;
+                    let y2d = (p.y * scale) + cy;
+
+                    ctx.globalAlpha = Math.sin(time + i) * 0.3 + 0.5;
+                    ctx.beginPath();
+                    ctx.arc(x2d, y2d, p.baseSize * scale * 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            requestAnimationFrame(loop);
+        }
+
+        // Start animation
+        loop();
+    </script>
+</body>
+
+</html>
