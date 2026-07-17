@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kiss Scroll — A Gift for You</title>
+  <meta name="description" content="Hold down to glide into a warm wine red world of kisses.">
+  
+  <!-- Elegant Fonts: Cormorant Garamond (Serif) & Plus Jakarta Sans (Sans-serif) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Silent Audio Element for Volume Button Interaction (progressive enhancement) -->
+  <audio id="silent-audio" loop playsinline src="data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA=="></audio>
+
+  <!-- Desktop & Tablet Guard Screen (Wider than 480px) -->
+  <div id="desktop-guard" class="desktop-guard">
+    <div class="guard-card">
+      <h1 class="guard-title">Please open this on your phone</h1>
+      <p class="guard-text">Kiss Scroll is a portrait-only experience designed specifically for mobile devices.</p>
+      <div class="qr-placeholder">
+        <!-- Optional: A lovely decorative mobile phone outline or graphic -->
+        <svg class="phone-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+          <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+      </div>
+      <p class="guard-hint">Scan this link or send it to your phone to begin.</p>
+    </div>
+  </div>
+
+  <!-- Primary Viewport Wrapper -->
+  <div id="viewport-wrapper" class="viewport-wrapper">
+    
+    <!-- Full-screen Press Layer (Catches all pointer interactions) -->
+    <div id="press-layer" class="press-layer"></div>
+
+    <!-- Scrollable Content Container -->
+    <div id="scroll-container" class="scroll-container">
+      
+      <!-- Opening Section (Viewport 1) -->
+      <section class="section opening-section">
+        <div class="opening-content">
+          <h1 class="title">For You</h1>
+          <p id="instruction-text" class="instruction">Press & hold anywhere to glide down</p>
+          <div class="arrow-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Long Middle (Viewports 2-9 are driven automatically by the height, this provides space) -->
+      <div class="spacer-middle"></div>
+
+      <!-- Bottom Section (Viewport 10) -->
+      <section class="section bottom-section">
+        <div class="bottom-content">
+          
+          <!-- Drop your own romantic text / message here! -->
+          <!-- We keep it blank so you can personalize it without pre-written copy -->
+          <div class="personal-message-container">
+            <!-- Example:
+            <h2 class="romantic-header">Happy Valentine's Day</h2>
+            <p class="romantic-body">I love you more than all these kisses combined...</p>
+            -->
+          </div>
+
+          <div class="scroll-top-prompt">
+            <p>Release to spring back to the top</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
