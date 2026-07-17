@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Initial Setup: Enable JS-specific styles
   document.body.classList.add('js-enabled');
 
+  // Prevent selection/context menu on long-press
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
   // DOM Elements
   const viewportWrapper = document.getElementById('viewport-wrapper');
   const scrollContainer = document.getElementById('scroll-container');
