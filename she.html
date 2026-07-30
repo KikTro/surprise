@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>A Journey of Devotion • For You</title>
+    <meta name="description" content="A romantic mobile experience of pure devotion, step by step, word by word.">
+    <meta name="theme-color" content="#060204">
+
+    <!-- Google Fonts for High-End Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #050204;
+            --bg-card: rgba(18, 5, 10, 0.65);
+            --red-primary: #dc143c;
+            --red-deep: #8b0000;
+            --red-glow: #ff2a55;
+            --red-velvet: #4a040d;
+            --text-light: #fff0f3;
+            --text-muted: #d4a5b2;
+            --text-dim: #7a4f5b;
+            --gold-accent: #ffd700;
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Outfit', -apple-system, sans-serif;
+            --font-script: 'Great Vibes', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            touch-action: manipulation;
+        }
+
+        /* Ambient Background Canvas */
+        #bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glowing Radial Background Light */
+        .radial-ambient {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140vw;
+            height: 140vh;
+            background: radial-gradient(circle at center, rgba(139, 0, 0, 0.28) 0%, rgba(74, 4, 13, 0.15) 45%, rgba(5, 2, 4, 0.95) 80%);
+            z-index: 2;
+            pointer-events: none;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                opacity: 0.7;
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.08);
+            }
+        }
+
+        /* App Container */
+        #app {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: env(safe-area-inset-top, 20px) env(safe-area-inset-right, 20px) env(safe-area-inset-bottom, 20px) env(safe-area-inset-left, 20px);
+        }
+
+        /* Intro Overlay */
+        #intro-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: radial-gradient(circle at center, #1a0309 0%, #050204 90%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
+        }
+
+        #intro-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .intro-heart {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 24px;
+            fill: var(--red-glow);
+            filter: drop-shadow(0 0 25px rgba(255, 42, 85, 0.8));
+            animation: heartbeat 1.6s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255, 42, 85, 0.7));
+            }
+
+            14% {
+                transform: scale(1.15);
+                filter: drop-shadow(0 0 35px rgba(255, 42, 85, 1));
+            }
+
+            28% {
+                transform: scale(1.03);
+                filter: drop-shadow(0 0 25px rgba(255, 42, 85, 0.8));
+            }
+
+            42% {
+                transform: scale(1.22);
+                filter: drop-shadow(0 0 45px rgba(255, 42, 85, 1));
+            }
+
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        .intro-title {
+            font-family: var(--font-script);
+            font-size: 3.5rem;
+            color: var(--text-light);
+            text-shadow: 0 0 20px rgba(220, 20, 60, 0.6);
+            margin-bottom: 12px;
+            line-height: 1.1;
+        }
+
+        .intro-subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+            max-width: 320px;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #8b0000 0%, #ff2a55 100%);
+            color: #ffffff;
+            border: none;
+            padding: 16px 36px;
+            font-size: 1.05rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(220, 20, 60, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .start-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 5px 15px rgba(220, 20, 60, 0.6);
+        }
+
+        /* Top Header Bar */
+        header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            padding-top: 10px;
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .chapter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(74, 4, 13, 0.5);
+            border: 1px solid rgba(220, 20, 60, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.5s ease;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(220, 20, 60, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.92);
+            background: rgba(220, 20, 60, 0.2);
+            color: var(--text-light);
+        }
+
+        .icon-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #8b0000, #ff2a55, #ffd700);
+            border-radius: 2px;
+            transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 0 10px rgba(255, 42, 85, 0.8);
+        }
+
+        /* Main Stage Container */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 10px;
+        }
+
+        /* Card Box */
+        .story-card {
+            width: 100%;
+            min-height: 280px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 42, 85, 0.25);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(139, 0, 0, 0.15);
+            transition: transform 0.3s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 42, 85, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Faded Past Lines Stack */
+        .history-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+            opacity: 0.65;
+            mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
+        }
+
+        .history-line {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            color: var(--text-dim);
+            line-height: 1.4;
+            transition: all 0.5s ease;
+            font-style: italic;
+        }
+
+        /* Active Typewriter Box */
+        .active-text-box {
+            min-height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .active-text {
+            font-family: var(--font-serif);
+            font-size: 1.65rem;
+            font-weight: 600;
+            color: var(--text-light);
+            line-height: 1.45;
+            letter-spacing: 0.2px;
+            text-shadow: 0 0 15px rgba(220, 20, 60, 0.4);
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .active-text.climax {
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 25px rgba(255, 42, 85, 0.9), 0 0 40px rgba(220, 20, 60, 0.6);
+            animation: climaxPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes climaxPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 25px rgba(255, 42, 85, 0.9);
+            }
+
+            50% {
+                transform: scale(1.03);
+                text-shadow: 0 0 35px rgba(255, 42, 85, 1), 0 0 50px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.3em;
+            background-color: var(--red-glow);
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+            box-shadow: 0 0 8px var(--red-glow);
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Tap Prompt */
+        .tap-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            animation: hintFade 2s infinite ease-in-out;
+        }
+
+        @keyframes hintFade {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: translateY(0);
+            }
+
+            50% {
+                opacity: 0.9;
+                transform: translateY(-3px);
+            }
+        }
+
+        .tap-hint svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--red-glow);
+        }
+
+        /* Bottom Control Bar */
+        footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding-bottom: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .counter-display {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .counter-display span {
+            color: var(--text-muted);
+        }
+
+        .auto-play-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(220, 20, 60, 0.2);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .auto-play-toggle.active {
+            background: rgba(220, 20, 60, 0.3);
+            border-color: var(--red-glow);
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 42, 85, 0.4);
+        }
+
+        /* Journal Modal Overlay */
+        #journal-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+            background: rgba(5, 2, 4, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        #journal-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(220, 20, 60, 0.2);
+        }
+
+        .modal-title {
+            font-family: var(--font-script);
+            font-size: 2.2rem;
+            color: var(--text-light);
+        }
+
+        .journal-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-right: 5px;
+        }
+
+        .journal-item {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid var(--red-deep);
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s ease;
+        }
+
+        .journal-item.active-item {
+            border-left-color: var(--red-glow);
+            background: rgba(220, 20, 60, 0.15);
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        /* Final Screen overlay */
+        #finale-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 95;
+            background: radial-gradient(circle at center, #24040d 0%, #050204 90%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+            overflow-y: auto;
+        }
+
+        #finale-screen.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .finale-heart {
+            width: 120px;
+            height: 120px;
+            fill: url(#heartGradient);
+            filter: drop-shadow(0 0 40px rgba(255, 42, 85, 0.9));
+            animation: heartbeat 1.4s ease-in-out infinite;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+
+        .finale-title {
+            font-family: var(--font-script);
+            font-size: 3.8rem;
+            color: var(--text-light);
+            text-shadow: 0 0 30px rgba(255, 42, 85, 0.7);
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .finale-message {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 380px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            font-style: italic;
+        }
+
+        .finale-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .secondary-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 42, 85, 0.3);
+            color: var(--text-light);
+            padding: 14px 28px;
+            font-size: 0.95rem;
+            font-family: var(--font-sans);
+            border-radius: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn:active {
+            transform: scale(0.96);
+            background: rgba(220, 20, 60, 0.25);
+        }
+
+        /* Screen Shake Animation on Key Sentences */
+        @keyframes screenShake {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            20% {
+                transform: translate(-4px, 3px);
+            }
+
+            40% {
+                transform: translate(4px, -3px);
+            }
+
+            60% {
+                transform: translate(-3px, -2px);
+            }
+
+            80% {
+                transform: translate(3px, 2px);
+            }
+        }
+
+        .shake {
+            animation: screenShake 0.4s ease-in-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 380px) {
+            .intro-title {
+                font-size: 2.8rem;
+            }
+
+            .active-text {
+                font-size: 1.45rem;
+            }
+
+            .active-text.climax {
+                font-size: 1.8rem;
+            }
+
+            .story-card {
+                padding: 22px 18px;
+                min-height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Ambient Canvas for Petals & Glow -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="radial-ambient"></div>
+
+    <!-- SVG Gradient Definitions -->
+    <svg style="width:0;height:0;position:absolute;">
+        <defs>
+            <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff2a55" />
+                <stop offset="50%" stop-color="#dc143c" />
+                <stop offset="100%" stop-color="#4a040d" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- INTRO LANDING SCREEN -->
+    <div id="intro-screen">
+        <svg class="intro-heart" viewBox="0 0 24 24" id="start-heart-icon">
+            <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+        <h1 class="intro-title">My Devotion</h1>
+        <p class="intro-subtitle">A journey of every thought, every feeling, and every reason why I love you.</p>
+        <button class="start-btn" id="start-btn">
+            <span>Begin Journey</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- MAIN APPLICATION STAGE -->
+    <div id="app">
+        <!-- Top Header Navigation -->
+        <header>
+            <div class="top-nav">
+                <div class="chapter-badge" id="chapter-badge">
+                    <span>Chapter I</span> • <span>I'm Proud Of You</span>
+                </div>
+                <div class="nav-actions">
+                    <button class="icon-btn" id="audio-toggle" title="Toggle Music & Sound">
+                        <svg id="sound-icon-on" viewBox="0 0 24 24">
+                            <path
+                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                        </svg>
+                        <svg id="sound-icon-off" viewBox="0 0 24 24" style="display:none;">
+                            <path
+                                d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                        </svg>
+                    </button>
+                    <button class="icon-btn" id="journal-toggle" title="View Full Devotion Journal">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-stage">
+            <div class="story-card" id="story-card">
+                <div class="history-stack" id="history-stack">
+                    <!-- Previous lines will render here dynamically -->
+                </div>
+
+                <div class="active-text-box">
+                    <div class="active-text" id="active-text"></div>
+                    <span class="cursor" id="cursor"></span>
+                </div>
+
+                <div class="tap-hint">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                    <span id="hint-text">Tap anywhere for next line</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Controls -->
+        <footer>
+            <div class="counter-display" id="counter-display">
+                Line <span id="current-index">1</span> of <span id="total-count">196</span>
+            </div>
+
+            <button class="auto-play-toggle" id="auto-play-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+                <span id="auto-text">Auto Play</span>
+            </button>
+        </footer>
+    </div>
+
+    <!-- JOURNAL MODAL -->
+    <div id="journal-modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Journal of Devotion</h2>
+            <button class="icon-btn" id="close-journal">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+            </button>
+        </div>
+        <div class="journal-list" id="journal-list"></div>
+    </div>
+
+    <!-- FINALE SCREEN -->
+    <div id="finale-screen">
+        <svg class="finale-heart" viewBox="0 0 24 24" id="finale-heart-icon">
+            <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+        <h2 class="finale-title">Forever & Always</h2>
+        <p class="finale-message">
+            "Through every quiet morning, through every storm, and through every smile... I will always love you,
+            support you, and hold you close."
+        </p>
+        <p class="finale-message">
+            "Made with love for my Shirsa by someone truely her's"<br>
+        </p>
+
+        <div class="finale-btn-group">
+            <button class="start-btn" id="replay-btn" style="justify-content: center;">
+                <span>Relive Our Journey</span>
+            </button>
+            <button class="secondary-btn" id="open-journal-finale">
+                <span>Read All Statements</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================
+           ALL SENTENCES (196 ITEMS) STRICTLY PRESERVED
+           ========================================== */
+        const LINES = [
+            // CHAPTER 1: I'm Proud Of You (23 lines)
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for waking up." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for brushing your hair." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for blinking." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for breathing." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for making your bed." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for eating." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for trying to eat." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for drinking water." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for being here." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for being you." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for smiling." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for continuing on even when things are difficult for you." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for standing up." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for blinking." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for standing up." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for sitting down." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for defending yourself." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for believing in yourself." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for simply trying." },
+            { chapter: 1, title: "I'm Proud Of You", text: "I’m proud of you for being alive." },
+            { chapter: 1, title: "I'm Proud Of You", text: "IM PROUD OF YOU. ♥", special: true },
+
+            // CHAPTER 2: Unconditional Love (123 lines)
+            { chapter: 2, title: "Unconditional Love", text: "i love you" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your smile" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your laugh" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your personality" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your hair" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your insecurities" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your accomplishments" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your failures" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your eyes" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your beauty" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your handwriting" },
+            { chapter: 2, title: "Unconditional Love", text: "i love the way you dance" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on your happy days" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on your sad days" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel lonely" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel helpless" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel like no one cares" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel forgotten" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel unmotivated" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel loved" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel sick" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel motivated" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel depressed" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel stresses" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel crazy" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel hopeful" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel cuddly" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel clingy" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel amazing" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel beautiful" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel like a failure" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel angry" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel aggressive" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel horrible" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel safe" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel unsafe" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel vulnerable" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel weird" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you on the days you feel ok" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're healthy" },
+            { chapter: 2, title: "Unconditional Love", text: "i love how you sing" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your taste in music" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your taste in movies" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your taste in tv shows" },
+            { chapter: 2, title: "Unconditional Love", text: "i love the way you move" },
+            { chapter: 2, title: "Unconditional Love", text: "i love the way you act" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you cry" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're kind" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're mean" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're alone" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you can't feel" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you feel too much" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you can't take life anymore" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you feel like it's too much" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're asleep" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you have nightmares" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you have dreams" },
+            { chapter: 2, title: "Unconditional Love", text: "i love how you believe" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you believe in yourself" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you don't believe in yourself" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you hate yourself" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you love yourself" },
+            { chapter: 2, title: "Unconditional Love", text: "i love the way you think" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you problems" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your solutions" },
+            { chapter: 2, title: "Unconditional Love", text: "i love how you support" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're in pain" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're hurt" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your promises" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your secrets" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your attitude" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your creativity" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your voice" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you hand gestures" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your stories" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your wounds" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your scars" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your face" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your past" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your future" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your present" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your outfits" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your style" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your art" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your honesty" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you lie" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're tired" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're energetic" },
+            { chapter: 2, title: "Unconditional Love", text: "i love how you look" },
+            { chapter: 2, title: "Unconditional Love", text: "i love how you cook" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're adventurous" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're scared" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your imperfections" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your perfections" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you worry" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you talk" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your opinions" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you have a headache" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you have a stomach ache" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you help others" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you need help" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're mature" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're immature" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you in the hard times" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you in the easy times" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when life is meh" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're responsible" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're irresponsible" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you fight" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you in your darkest moments" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you in your brightest moments" },
+            { chapter: 2, title: "Unconditional Love", text: "i love your heart" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you in the day" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you in the night" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you at midnight" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you at 3 am" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you at all times" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you at your best" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you at your worst" },
+            { chapter: 2, title: "Unconditional Love", text: "i love the little things you do" },
+            { chapter: 2, title: "Unconditional Love", text: "i love all of you" },
+            { chapter: 2, title: "Unconditional Love", text: "i love you when you're you" },
+            { chapter: 2, title: "Unconditional Love", text: "i love 𝙮𝙤𝙪 <3", special: true },
+
+            // CHAPTER 3: Every Detail Of You (18 lines including transition)
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur looks" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur smile" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur eyes" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur hair" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur skin" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur personality" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur touch" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur insecurities" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur dream" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur walk" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur talk" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur name" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur weight" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur height" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur things that u love" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur happiness" },
+            { chapter: 3, title: "Every Detail Of You", text: "I love ur unique" },
+            { chapter: 3, title: "Every Detail Of You", text: "But...", transition: true },
+
+            // CHAPTER 4: I Hate Your Pain (14 lines including transition)
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur sad" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur crying" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur depressed" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur stress" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur get abused with ur family" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur see what the things that should you don't have to see" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur throw the stuff" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur crying alone" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur scared" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur harm ur self" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur anxiety get higher all the time" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur lost" },
+            { chapter: 4, title: "I Hate Your Pain", text: "I hate when ur heart is breaking" },
+            { chapter: 4, title: "I Hate Your Pain", text: "And...", transition: true },
+
+            // CHAPTER 5: You Are Everything (18 lines)
+            { chapter: 5, title: "You Are Everything", text: "Ur beautiful" },
+            { chapter: 5, title: "You Are Everything", text: "Ur perfect" },
+            { chapter: 5, title: "You Are Everything", text: "Ur pretty" },
+            { chapter: 5, title: "You Are Everything", text: "Ur gorgeous" },
+            { chapter: 5, title: "You Are Everything", text: "Ur unique" },
+            { chapter: 5, title: "You Are Everything", text: "Ur amazing" },
+            { chapter: 5, title: "You Are Everything", text: "Ur awesome" },
+            { chapter: 5, title: "You Are Everything", text: "Ur hardworker" },
+            { chapter: 5, title: "You Are Everything", text: "Ur strong" },
+            { chapter: 5, title: "You Are Everything", text: "Ur creative" },
+            { chapter: 5, title: "You Are Everything", text: "Ur wonderful" },
+            { chapter: 5, title: "You Are Everything", text: "Ur cheerful" },
+            { chapter: 5, title: "You Are Everything", text: "Ur heartkind" },
+            { chapter: 5, title: "You Are Everything", text: "Ur caring" },
+            { chapter: 5, title: "You Are Everything", text: "Ur shympathic" },
+            { chapter: 5, title: "You Are Everything", text: "Ur NOT weak", special: true },
+            { chapter: 5, title: "You Are Everything", text: "Ur everything", special: true },
+            { chapter: 5, title: "You Are Everything", text: "Don't listen to other people saying...❤", special: true }
+        ];
+
+        const CHAPTER_ROMAN = ["I", "II", "III", "IV", "V"];
+
+        /* STATE VARIABLES */
+        let currentIndex = 0;
+        let typingTimer = null;
+        let isTyping = false;
+        let soundEnabled = true;
+        let autoPlayEnabled = false;
+        let autoPlayTimer = null;
+        let currentDisplayedText = "";
+
+        /* DOM ELEMENTS */
+        const introScreen = document.getElementById('intro-screen');
+        const startBtn = document.getElementById('start-btn');
+        const chapterBadge = document.getElementById('chapter-badge');
+        const progressBar = document.getElementById('progress-bar');
+        const historyStack = document.getElementById('history-stack');
+        const activeTextEl = document.getElementById('active-text');
+        const hintTextEl = document.getElementById('hint-text');
+        const currentIndexEl = document.getElementById('current-index');
+        const totalCountEl = document.getElementById('total-count');
+        const autoPlayBtn = document.getElementById('auto-play-btn');
+        const autoTextEl = document.getElementById('auto-text');
+        const audioToggle = document.getElementById('audio-toggle');
+        const soundIconOn = document.getElementById('sound-icon-on');
+        const soundIconOff = document.getElementById('sound-icon-off');
+        const journalModal = document.getElementById('journal-modal');
+        const journalToggle = document.getElementById('journal-toggle');
+        const closeJournal = document.getElementById('close-journal');
+        const journalList = document.getElementById('journal-list');
+        const finaleScreen = document.getElementById('finale-screen');
+        const replayBtn = document.getElementById('replay-btn');
+        const openJournalFinale = document.getElementById('open-journal-finale');
+        const mainStage = document.getElementById('main-stage');
+
+        totalCountEl.textContent = LINES.length;
+
+        /* ==========================================
+           CANVAS PARTICLE ENGINE (Falling Petals & Sparkles)
+           ========================================== */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 8 + 4;
+                this.speedY = Math.random() * 1.2 + 0.6;
+                this.speedX = Math.sin(Math.random() * Math.PI) * 0.8;
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = (Math.random() - 0.5) * 1.5;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.color = Math.random() > 0.3 ? '#dc143c' : '#ff2a55';
+                this.isHeart = Math.random() > 0.85;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.01) * 0.5 + this.speedX * 0.2;
+                this.rotation += this.rotSpeed;
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                    this.y = -10;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+
+                if (this.isHeart) {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    const topCurveHeight = this.size * 0.3;
+                    ctx.moveTo(0, topCurveHeight);
+                    ctx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, topCurveHeight);
+                    ctx.bezierCurveTo(-this.size / 2, (this.size + topCurveHeight) / 2, 0, this.size, 0, this.size);
+                    ctx.bezierCurveTo(0, this.size, this.size / 2, (this.size + topCurveHeight) / 2, this.size / 2, topCurveHeight);
+                    ctx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, topCurveHeight);
+                    ctx.fill();
+                } else {
+                    // Petal oval shape
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, this.size, this.size * 0.5, 0, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = window.innerWidth < 600 ? 35 : 60;
+            for (let i = 0; i < count; i++) {
+                const p = new Particle();
+                p.y = Math.random() * canvas.height; // populate initial screen
+                particles.push(p);
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        function spawnHeartBurst(x, y) {
+            for (let i = 0; i < 15; i++) {
+                const p = new Particle();
+                p.x = x || canvas.width / 2;
+                p.y = y || canvas.height / 2;
+                p.isHeart = true;
+                p.size = Math.random() * 12 + 8;
+                p.speedY = (Math.random() - 0.7) * 4;
+                p.speedX = (Math.random() - 0.5) * 5;
+                p.opacity = 0.9;
+                particles.push(p);
+            }
+        }
+
+        /* ==========================================
+           WEB AUDIO SYNTHESIZER (Ambient & Typewriter)
+           ========================================== */
+        let audioCtx = null;
+        let synthOsc = null;
+        let gainNode = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTypewriterClick() {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const clickGain = audioCtx.createGain();
+
+                // Subtle soft wooden tap frequency
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(450 + Math.random() * 120, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.03);
+
+                clickGain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+                clickGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+
+                osc.connect(clickGain);
+                clickGain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.035);
+            } catch (e) { }
+        }
+
+        function playSpecialChime() {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const noteGain = audioCtx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.08);
+
+                    noteGain.gain.setValueAtTime(0, audioCtx.currentTime + idx * 0.08);
+                    noteGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + idx * 0.08 + 0.02);
+                    noteGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.08 + 1.2);
+
+                    osc.connect(noteGain);
+                    noteGain.connect(audioCtx.destination);
+
+                    osc.start(audioCtx.currentTime + idx * 0.08);
+                    osc.stop(audioCtx.currentTime + idx * 0.08 + 1.3);
+                });
+            } catch (e) { }
+        }
+
+        /* Ambient Warm Pad Synth */
+        let isAmbientPlaying = false;
+        function startAmbientSynth() {
+            if (isAmbientPlaying || !soundEnabled) return;
+            try {
+                initAudio();
+                gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.01, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 3);
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 350;
+
+                // Soft triad chord (A-flat, C, E-flat)
+                [207.65, 261.63, 311.13].forEach(freq => {
+                    const osc = audioCtx.createOscillator();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    osc.connect(filter);
+                    osc.start();
+                });
+
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                isAmbientPlaying = true;
+            } catch (e) { }
+        }
+
+        /* ==========================================
+           TYPEWRITER ANIMATION & JOURNEY LOGIC
+           ========================================== */
+        function renderCurrentSentence(instant = false) {
+            if (currentIndex >= LINES.length) {
+                showFinaleScreen();
+                return;
+            }
+
+            const item = LINES[currentIndex];
+            const text = item.text;
+
+            // Update Chapter Info
+            const roman = CHAPTER_ROMAN[item.chapter - 1] || "I";
+            chapterBadge.innerHTML = `<span>Chapter ${roman}</span> • <span>${item.title}</span>`;
+
+            // Update Progress Bar & Counter
+            const pct = ((currentIndex + 1) / LINES.length) * 100;
+            progressBar.style.width = `${pct}%`;
+            currentIndexEl.textContent = currentIndex + 1;
+
+            // Apply Climax Styling if applicable
+            if (item.special) {
+                activeTextEl.classList.add('climax');
+            } else {
+                activeTextEl.classList.remove('climax');
+            }
+
+            // Haptic Feedback for Mobile
+            if (item.special && window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate([40, 60, 80]);
+            }
+
+            if (item.special) {
+                document.body.classList.add('shake');
+                setTimeout(() => document.body.classList.remove('shake'), 450);
+                spawnHeartBurst();
+                playSpecialChime();
+            }
+
+            // Clear timer & setup typing
+            if (typingTimer) clearInterval(typingTimer);
+            activeTextEl.textContent = "";
+            currentDisplayedText = "";
+            isTyping = true;
+            hintTextEl.textContent = "Tap to complete sentence";
+
+            if (instant) {
+                activeTextEl.textContent = text;
+                currentDisplayedText = text;
+                isTyping = false;
+                hintTextEl.textContent = "Tap for next line ♥";
+                return;
+            }
+
+            let charIdx = 0;
+            const baseSpeed = item.special ? 55 : 32;
+
+            typingTimer = setInterval(() => {
+                if (charIdx < text.length) {
+                    const char = text.charAt(charIdx);
+                    activeTextEl.textContent += char;
+                    currentDisplayedText += char;
+                    charIdx++;
+                    playTypewriterClick();
+                } else {
+                    clearInterval(typingTimer);
+                    isTyping = false;
+                    hintTextEl.textContent = "Tap anywhere for next line ♥";
+
+                    if (autoPlayEnabled) {
+                        scheduleAutoNext();
+                    }
+                }
+            }, baseSpeed);
+        }
+
+        function advanceNextLine() {
+            startAmbientSynth();
+            if (isTyping) {
+                // Instant complete current typing
+                if (typingTimer) clearInterval(typingTimer);
+                const item = LINES[currentIndex];
+                activeTextEl.textContent = item.text;
+                currentDisplayedText = item.text;
+                isTyping = false;
+                hintTextEl.textContent = "Tap anywhere for next line ♥";
+                if (autoPlayEnabled) scheduleAutoNext();
+                return;
+            }
+
+            // Move current sentence to history stack
+            if (currentDisplayedText.trim() !== "") {
+                pushHistoryLine(currentDisplayedText);
+            }
+
+            currentIndex++;
+
+            if (currentIndex >= LINES.length) {
+                showFinaleScreen();
+                return;
+            }
+
+            renderCurrentSentence();
+        }
+
+        function pushHistoryLine(text) {
+            const p = document.createElement('div');
+            p.className = 'history-line';
+            p.textContent = text;
+            historyStack.appendChild(p);
+
+            // Keep maximum 2 lines in visible history to prevent crowding
+            while (historyStack.children.length > 2) {
+                historyStack.removeChild(historyStack.firstChild);
+            }
+        }
+
+        function scheduleAutoNext() {
+            if (autoPlayTimer) clearTimeout(autoPlayTimer);
+            const delay = LINES[currentIndex]?.special ? 3500 : 2200;
+            autoPlayTimer = setTimeout(() => {
+                if (autoPlayEnabled && !isTyping) {
+                    advanceNextLine();
+                }
+            }, delay);
+        }
+
+        /* ==========================================
+           JOURNAL MODAL LOGIC
+           ========================================== */
+        function populateJournal() {
+            journalList.innerHTML = "";
+            LINES.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = `journal-item ${idx === currentIndex ? 'active-item' : ''}`;
+                div.textContent = `${idx + 1}. ${item.text}`;
+                div.addEventListener('click', () => {
+                    currentIndex = idx;
+                    historyStack.innerHTML = "";
+                    renderCurrentSentence(true);
+                    closeJournalModal();
+                });
+                journalList.appendChild(div);
+            });
+        }
+
+        function openJournalModal() {
+            populateJournal();
+            journalModal.classList.add('active');
+        }
+
+        function closeJournalModal() {
+            journalModal.classList.remove('active');
+        }
+
+        /* ==========================================
+           FINALE SCREEN LOGIC
+           ========================================== */
+        function showFinaleScreen() {
+            if (autoPlayTimer) clearTimeout(autoPlayTimer);
+            finaleScreen.classList.add('active');
+            playSpecialChime();
+            spawnHeartBurst(window.innerWidth / 2, window.innerHeight / 2);
+        }
+
+        function resetJourney() {
+            currentIndex = 0;
+            historyStack.innerHTML = "";
+            finaleScreen.classList.remove('active');
+            renderCurrentSentence();
+        }
+
+        /* ==========================================
+           EVENT LISTENERS
+           ========================================== */
+        startBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            initAudio();
+            startAmbientSynth();
+            introScreen.classList.add('hidden');
+            renderCurrentSentence();
+        });
+
+        document.getElementById('start-heart-icon').addEventListener('click', (e) => {
+            e.stopPropagation();
+            startBtn.click();
+        });
+
+        // Tap anywhere on main stage to progress
+        mainStage.addEventListener('click', (e) => {
+            // Don't trigger if clicked inside buttons or modals
+            if (e.target.closest('.icon-btn') || e.target.closest('.auto-play-toggle')) return;
+            advanceNextLine();
+            spawnHeartBurst(e.clientX, e.clientY);
+        });
+
+        // Auto Play Toggle
+        autoPlayBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            autoPlayEnabled = !autoPlayEnabled;
+            if (autoPlayEnabled) {
+                autoPlayBtn.classList.add('active');
+                autoTextEl.textContent = "Auto On";
+                if (!isTyping) scheduleAutoNext();
+            } else {
+                autoPlayBtn.classList.remove('active');
+                autoTextEl.textContent = "Auto Play";
+                if (autoPlayTimer) clearTimeout(autoPlayTimer);
+            }
+        });
+
+        // Audio Toggle
+        audioToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            soundEnabled = !soundEnabled;
+            if (soundEnabled) {
+                soundIconOn.style.display = 'block';
+                soundIconOff.style.display = 'none';
+                startAmbientSynth();
+            } else {
+                soundIconOn.style.display = 'none';
+                soundIconOff.style.display = 'block';
+                if (gainNode && audioCtx) {
+                    gainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+                    isAmbientPlaying = false;
+                }
+            }
+        });
+
+        // Journal Modal Events
+        journalToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openJournalModal();
+        });
+
+        closeJournal.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeJournalModal();
+        });
+
+        // Finale Events
+        replayBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetJourney();
+        });
+
+        openJournalFinale.addEventListener('click', (e) => {
+            e.stopPropagation();
+            finaleScreen.classList.remove('active');
+            openJournalModal();
+        });
+
+        document.getElementById('finale-heart-icon').addEventListener('click', (e) => {
+            spawnHeartBurst(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2);
+            playSpecialChime();
+        });
+
+        // Keyboard support (Spacebar / Right Arrow to advance)
+        document.addEventListener('keydown', (e) => {
+            if (introScreen.classList.contains('hidden') && !journalModal.classList.contains('active')) {
+                if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') {
+                    e.preventDefault();
+                    advanceNextLine();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
