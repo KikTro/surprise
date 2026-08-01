@@ -98,7 +98,7 @@ function initBgCanvas() {
 }
 
 /* ==========================================================================
-   2. BACKGROUND AUDIO PLAYER WITH 5s FADE-IN & FADE-OUT LOOP
+   2. BACKGROUND AUDIO PLAYER WITH AUTOMATIC START & FADE IN/OUT LOOP
    ========================================================================== */
 function initBackgroundAudio() {
   const audio = document.getElementById('bgAudio');
@@ -139,7 +139,7 @@ function initBackgroundAudio() {
         fadeInterval = setInterval(updateAudioFade, 100);
       }
     }).catch(err => {
-      console.log('Autoplay deferred until user interaction');
+      console.log('Autoplay waiting for first user gesture');
     });
   }
 
@@ -153,6 +153,20 @@ function initBackgroundAudio() {
     }
   }
 
+  // Attempt immediate playback on load
+  playAudio();
+
+  // Also trigger play on any user gesture (click, scroll, touch, mouse move)
+  function triggerPlayOnGesture() {
+    if (!isPlaying) {
+      playAudio();
+    }
+  }
+
+  ['click', 'touchstart', 'scroll', 'mousemove', 'pointerdown'].forEach(evt => {
+    window.addEventListener(evt, triggerPlayOnGesture, { passive: true, once: false });
+  });
+
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (isPlaying) {
@@ -161,17 +175,6 @@ function initBackgroundAudio() {
       playAudio();
     }
   });
-
-  function handleFirstInteraction() {
-    if (!isPlaying) {
-      playAudio();
-    }
-    document.removeEventListener('click', handleFirstInteraction);
-    document.removeEventListener('touchstart', handleFirstInteraction);
-  }
-
-  document.addEventListener('click', handleFirstInteraction, { once: true });
-  document.addEventListener('touchstart', handleFirstInteraction, { once: true });
 }
 
 /* ==========================================================================
